@@ -24,7 +24,11 @@ def connect(address: str, port: int) -> socket:
     :return: socket with an active connection to the specified server
     """
     conn: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    conn.connect((address, port))
+    try:
+        conn.connect((address, port))
+    except ConnectionRefusedError as e:
+        # Handle the exception here
+        print("Error: Connection refused, please check the server is running and IP address and port are correct.")
     return conn
 
 
