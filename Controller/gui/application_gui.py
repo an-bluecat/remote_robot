@@ -2,16 +2,33 @@ from tkinter import *
 from tkinter.font import Font
 from typing import Dict, List
 
-try:
-    from Controller.gui.model import MiscControlSpec
-    from Controller.gui.modules import *
-    from Controller.vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
-    from Controller.video import VideoViewer, StaticImageViewer
-except ModuleNotFoundError:
-    from .model import MiscControlSpec
-    from .modules import *
-    from vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
-    from video import VideoViewer, StaticImageViewer
+import sys, os
+# Get the current directory of the script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Navigate to the parent directory
+parent_dir = os.path.dirname(current_dir)
+# Append the parent directory to the sys.path list
+sys.path.append(current_dir)
+sys.path.append(parent_dir)
+
+
+# try:
+#     from Controller.gui.model import MiscControlSpec
+#     from Controller.gui.modules import *
+#     from Controller.vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
+#     from Controller.video import VideoViewer, StaticImageViewer
+# except ModuleNotFoundError:
+#     from .model import MiscControlSpec
+#     from .modules import *
+#     from vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
+#     from video import VideoViewer, StaticImageViewer
+# import model
+from model import *
+# from model.misc_control_spec import MiscControlSpec
+from modules import *
+from vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
+from video.static_image_viewer import StaticImageViewer
+from video.video_viewer import VideoViewer
 
 
 class GUI(Frame):

@@ -17,6 +17,11 @@ class StaticImageViewer(VideoViewer):
         self.label: Label = display_label
 
     def video_stream_loop(self) -> None:
+        import os
+        curDir=os.getcwd()
+        if not curDir.endswith("Controller/video"):
+            os.chdir(curDir+"/rc-car/Controller/video")
         self.img: PhotoImage = PhotoImage(file=self.image_name)
+
         self.label.imgtk = self.img
         self.label.configure(image=self.img)

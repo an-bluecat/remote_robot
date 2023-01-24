@@ -44,10 +44,16 @@ class VideoStreamReceiver(VideoViewer):
         """
         Displays placeholder image
         """
+        import os
+        curDir=os.getcwd()
+        if not curDir.endswith("Controller"):
+            os.chdir(curDir+"/RC-car/Controller/")
         if self.placeholder:
-            self.img: PhotoImage = PhotoImage(file=self.placeholder)
+            # self.img: PhotoImage = PhotoImage(file=curDir+self.placeholder)
+            self.img: PhotoImage = PhotoImage(file=r"../unnamed.png")
             self.display_label.imgtk = self.img
             self.display_label.configure(image=self.img)
+        os.chdir(curDir)
 
     def loop_repeater(self, func: Callable[[], bool]) -> None:
         """

@@ -1,11 +1,13 @@
 from tkinter import Frame, LabelFrame, Label, Radiobutton, IntVar, Variable, E, W, NW
 from typing import List, Dict
 
-try:
-    from Controller.gui.model import MiscControlSpec
-except ModuleNotFoundError:
-    from ..model import MiscControlSpec
-
+# try:
+#     from Controller.gui.model import MiscControlSpec
+# except ModuleNotFoundError:
+#     from ..model import MiscControlSpec
+import sys
+sys.path.append('../')
+from model import MiscControlSpec
 
 class MiscControlsModule(Frame):
     """

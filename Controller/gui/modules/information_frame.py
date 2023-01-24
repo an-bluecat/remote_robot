@@ -13,9 +13,9 @@ class InformationFrame(Frame):
         Frame.__init__(self, parent)
 
         self.frame: LabelFrame = LabelFrame(parent, text="About")
-        Label(self.frame, fg="grey", text="Author: Johannes Ernstsen", anchor=NW, width=35) \
+        Label(self.frame, fg="grey", text="ECE496 Capstone", anchor=NW, width=35) \
             .grid(row=0, column=0, sticky=N + S + W)
-        Label(self.frame, fg="grey", text="Ernstsen Software").grid(row=1, column=0, sticky=N + S + W)
+        Label(self.frame, fg="grey", text="Remote Controlled Robot Software").grid(row=1, column=0, sticky=N + S + W)
         Label(self.frame, fg="grey", text=version).grid(row=2, column=0, sticky=N + S + E)
 
     def grid(self, row: int = 0, column: int = 0, **kwargs) -> None:

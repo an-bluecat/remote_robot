@@ -1,10 +1,32 @@
 import threading
 from tkinter import Frame, LabelFrame, Label
+import sys, os
 
-try:
-    from Controller.video import VideoViewer
-except ModuleNotFoundError:
-    from video import VideoViewer
+# Get the current directory of the script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Navigate to the parent directory
+parent_dir = os.path.dirname(current_dir)
+parent_dir = os.path.dirname(parent_dir)
+# Append the parent directory to the sys.path list
+sys.path.append(parent_dir)
+# sys.path.append('../video')
+# import video.video_viewer
+# import video_viewer
+# import video.video_viewer
+import os
+from video import video_viewer
+from video.video_viewer import VideoViewer
+# from Controller.video import VideoViewer
+
+
+
+
+
+
+# try:
+#     from Controller.video import VideoViewer
+# except ModuleNotFoundError:
+#     from video import VideoViewer
 
 
 class StreamFrame(Frame):
