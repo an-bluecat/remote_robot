@@ -60,7 +60,7 @@ if __name__ == "__main__":
     cam_streamer = CamStreamer()
 
     vehicle_controller = VehicleController()
-    vehicle_controller.initialize("/dev/ttyUSB0")
+    # vehicle_controller.initialize("/dev/ttyUSB0")
 
     commands = {
         **compute_controller_actions(vehicle_controller),

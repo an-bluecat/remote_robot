@@ -49,6 +49,8 @@ class Server(object):
         print("listening on local ip: ", localIP, " Port:", self.port)
         self.socket.bind((localIP, self.port))
         self.socket.listen(1)  # listens for only one connection
+        # scp -r RaspberryPi/ pi@192.168.0.31:/home/pi/Desktop/
+
 
     def server_loop(self) -> None:
         """
@@ -63,8 +65,10 @@ class Server(object):
                 success: bool = self.command_handler.handle_command(data)
                 if success:
                     conn.send("ack".encode("UTF-8"))
+                    print("data received: ", data)
                 else:
                     conn.send("nack".encode("UTF-8"))
+                
             conn.close()
             print('client disconnected')
 

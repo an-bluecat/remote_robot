@@ -42,6 +42,7 @@ class CamStreamer(Streamer):
         self.rpi_socket.close()
         self.connection = None
         self.rpi_socket = None
+        print("Camera Connection terminated")
 
     def serve_footage(self, time_limit: int = -1) -> None:
         """
@@ -109,7 +110,7 @@ class CamStreamer(Streamer):
 if __name__ == "__main__":
     streamer = CamStreamer()
     try:
-        streamer.initialize_connection('192.168.0.110', 8000)
+        streamer.initialize_connection('192.168.0.31', 8000)
         streamer.serve_footage(-1)
     finally:
         streamer.terminate_connection()
