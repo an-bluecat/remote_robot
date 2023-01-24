@@ -1,16 +1,37 @@
 import argparse
 from typing import Dict, List, Tuple, Callable
+# Get the current directory of the script
+import sys, os
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# # Navigate to the parent directory
+# parent_dir = os.path.dirname(current_dir)
+# # Append the parent directory to the sys.path list
+# sys.path.append(parent_dir)
+# sys.path.append(current_dir)
+# parent_dir = os.path.dirname(parent_dir)
+# sys.path.append(parent_dir)
+# try:
+#     from Controller.gui.application_gui import GUI
+#     from Controller.gui.model import MiscControlSpec
+#     from Controller.vehicle_control import VehicleController, StreamControllerI, SimpleStreamController
+#     from Controller.video import VideoStreamReceiver
+# except ModuleNotFoundError:
+#     from gui.application_gui import GUI
+#     from gui.model import MiscControlSpec
+#     from vehicle_control import VehicleController, StreamControllerI, SimpleStreamController
+#     from video import VideoStreamReceiver
 
-try:
-    from Controller.gui.application_gui import GUI
-    from Controller.gui.model import MiscControlSpec
-    from Controller.vehicle_control import VehicleController, StreamControllerI, SimpleStreamController
-    from Controller.video import VideoStreamReceiver
-except ModuleNotFoundError:
-    from gui.application_gui import GUI
-    from gui.model import MiscControlSpec
-    from vehicle_control import VehicleController, StreamControllerI, SimpleStreamController
-    from video import VideoStreamReceiver
+from gui.application_gui import GUI
+from gui.model import MiscControlSpec
+from vehicle_control import VehicleController, StreamControllerI, SimpleStreamController
+# from video import VideoStreamReceiver
+
+
+# from video.video_stream_receiver import VideoStreamReceiver
+
+# from video import video_stream_receiver
+from video.video_stream_receiver import VideoStreamReceiver
+# from video_stream_receiver import VideoStreamReceiver
 
 
 def build_stream_configuration(controller: VehicleController) -> StreamControllerI:
@@ -63,7 +84,7 @@ if __name__ == "__main__":
     }
 
     import socket
-    print(socket.gethostbyname(socket.gethostname()))
+    print("socket host name", socket.gethostbyname(socket.gethostname()))
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-config", dest="config", default="Fallback", type=str)
