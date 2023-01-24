@@ -45,7 +45,9 @@ class Server(object):
         self.socket = socket.socket(family, socket_kind)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        self.socket.bind((self.get_local_ip(), self.port))
+        localIP=self.get_local_ip()
+        print("listening on local ip: ", localIP, " Port:", self.port)
+        self.socket.bind((localIP, self.port))
         self.socket.listen(1)  # listens for only one connection
 
     def server_loop(self) -> None:
