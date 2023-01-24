@@ -47,7 +47,7 @@ class VideoStreamReceiver(VideoViewer):
         import os
         curDir=os.getcwd()
         if not curDir.endswith("Controller"):
-            os.chdir(curDir+"/RC-car/Controller/")
+            os.chdir(curDir+"/remote_robot/Controller/")
         if self.placeholder:
             # self.img: PhotoImage = PhotoImage(file=curDir+self.placeholder)
             self.img: PhotoImage = PhotoImage(file=r"../unnamed.png")
