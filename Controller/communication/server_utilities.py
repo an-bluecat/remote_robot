@@ -29,6 +29,7 @@ def connect(address: str, port: int) -> socket:
     except ConnectionRefusedError as e:
         # Handle the exception here
         print("Error: Connection refused, please check the server is running and IP address and port are correct.")
+        print("tried to connect to: " + str(address) + ":" + str(port))
     return conn
 
 

@@ -14,6 +14,7 @@ class VehicleController(VehicleControllerI):
     """
 
     def __init__(self, address: str, port: int):
+        print("initializing vehicle controller, ", "address: ", address, " port: ", port)
         self.connection: socket = server.connect(address, port)
 
     def set_drive(self, val: int) -> None:
@@ -35,12 +36,14 @@ class VehicleController(VehicleControllerI):
         """
         Requests stream initialization
         """
+        print("client requesting stream init")
         server.send(self.connection, "STREAM-INITIALIZE;" + Configurator.get_local_ip() + ";8000")
 
     def stream_start(self) -> None:
         """
         Requests the vehicle starts streaming
         """
+        print("client requesting stream start")
         server.send(self.connection, "STREAM-SERVE-FOOTAGE;")
 
     def stream_stop(self) -> None:

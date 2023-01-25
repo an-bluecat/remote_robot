@@ -73,8 +73,11 @@ def mini_car_config(controller: VehicleController) -> Tuple[Dict[str, bool], Lis
         MiscControlSpec("lights", lambda v: controller.set_lights((1 if v else 0)), param_type=bool, row=0, column=0,
                         description="Toggles lights on vehicle")
     ]
-
-    return mini_enabled, mini_misc
+    # mini_misc = [
+    #     MiscControlSpec("lights", lambda v: controller.set_lights((1 if v else 0)), param_type=bool, row=0, column=0,
+    #                     description="Toggles lights on vehicle")
+    # ]
+    # return mini_enabled, mini_misc
 
 
 if __name__ == "__main__":
@@ -108,3 +111,6 @@ if __name__ == "__main__":
     else:
         print("Configuration '" + args.config + "' not found. Options are: " + ", ".join(
             list(configuration_builders.keys())))
+
+
+# use this command in the capstone folder: /usr/local/bin/python3 application.py -vehicleAddress=192.168.0.31 -config MiniCar
