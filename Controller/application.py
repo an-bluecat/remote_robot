@@ -69,15 +69,16 @@ def mini_car_config(controller: VehicleController) -> Tuple[Dict[str, bool], Lis
         "direction": True
     }
 
-    mini_misc = [
-        MiscControlSpec("lights", lambda v: controller.set_lights((1 if v else 0)), param_type=bool, row=0, column=0,
-                        description="Toggles lights on vehicle")
-    ]
     # mini_misc = [
     #     MiscControlSpec("lights", lambda v: controller.set_lights((1 if v else 0)), param_type=bool, row=0, column=0,
     #                     description="Toggles lights on vehicle")
     # ]
-    # return mini_enabled, mini_misc
+
+    mini_misc = [
+        MiscControlSpec("video", lambda v: controller.stream_start() if v else controller.stream_stop(), param_type=bool, row=0, column=0,
+                        description="Toggles video on vehicle")
+    ]
+    return mini_enabled, mini_misc
 
 
 if __name__ == "__main__":

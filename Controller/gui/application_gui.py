@@ -86,7 +86,9 @@ class GUI(Frame):
         self.draw_throttle_controls(structure)
         self.draw_direction_controls(structure)
         self.draw_information(structure)
+
         self.draw_cam_feed_controls(master, stream_controller)
+        # stream_controller.start_stream()
 
     @staticmethod
     def build_frame_structure(root_frame: Frame) -> Dict[str, Frame]:
@@ -219,10 +221,12 @@ class GUI(Frame):
         :type frames: frames dictionary. Maps string to Frame
         :param frames: frame dictionary
         """
+        print("Drawing information")
         frame: Frame = frames["info"]
         InformationFrame(frame, self.version).grid(sticky=N + S + E + W)
 
     def draw_cam_feed_controls(self, master: Frame, controller: StreamControllerI) -> None:
+        print("Drawing cam feed controls")
         top_bar = Menu(master)
         self.master.config(menu=top_bar)
 
@@ -231,11 +235,12 @@ class GUI(Frame):
         cam_controls_menu.add_command(label="Start Streaming", command=controller.start_stream)
         cam_controls_menu.add_command(label="Stop Steaming", command=controller.stop_stream)
         top_bar.add_cascade(label="Video", menu=cam_controls_menu, underline=0)
-
+        print("Done drawing cam feed controls")
 
 if __name__ == "__main__":
     misc_controls_dict: List[MiscControlSpec] = [
         MiscControlSpec(display_name="Lights", on_change=lambda v: print(v), param_type=bool, row=0, column=0)
     ]
+    
     gui = GUI(viewer=StaticImageViewer(r"../../unnamed.png"), misc_controls=misc_controls_dict)
     gui.mainloop()

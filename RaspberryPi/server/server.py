@@ -60,14 +60,17 @@ class Server(object):
             conn, addr = self.socket.accept()
             while True:
                 data = conn.recv(4096).decode()
+                print("data received: ", data)
                 if not data:
                     break
                 success: bool = self.command_handler.handle_command(data)
                 if success:
                     conn.send("ack".encode("UTF-8"))
-                    print("data received: ", data)
+                    print("data received is a valid command")
                 else:
                     conn.send("nack".encode("UTF-8"))
+                    print("data received is NOT a valid command")
+
                 
             conn.close()
             print('client disconnected')
