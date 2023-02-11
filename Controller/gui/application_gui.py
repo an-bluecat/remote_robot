@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.font import Font
 from typing import Dict, List
 
+
 import sys, os
 # Get the current directory of the script
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -225,8 +226,18 @@ class GUI(Frame):
         frame: Frame = frames["info"]
         InformationFrame(frame, self.version).grid(sticky=N + S + E + W)
 
+    # def draw_cam_feed_controls(self, master: Frame, controller: StreamControllerI) -> None:
+    #     print("Drawing cam feed controls")
+    #     top_bar = Menu(master)
+    #     self.master.config(menu=top_bar)
+
+    #     cam_controls_menu = Menu(top_bar, tearoff=0)
+
+    #     cam_controls_menu.add_command(label="Start Streaming", command=controller.start_stream)
+    #     cam_controls_menu.add_command(label="Stop Steaming", command=controller.stop_stream)
+    #     top_bar.add_cascade(label="Video", menu=cam_controls_menu, underline=0)
+    #     print("Done drawing cam feed controls")
     def draw_cam_feed_controls(self, master: Frame, controller: StreamControllerI) -> None:
-        print("Drawing cam feed controls")
         top_bar = Menu(master)
         self.master.config(menu=top_bar)
 
@@ -235,7 +246,6 @@ class GUI(Frame):
         cam_controls_menu.add_command(label="Start Streaming", command=controller.start_stream)
         cam_controls_menu.add_command(label="Stop Steaming", command=controller.stop_stream)
         top_bar.add_cascade(label="Video", menu=cam_controls_menu, underline=0)
-        print("Done drawing cam feed controls")
 
 if __name__ == "__main__":
     misc_controls_dict: List[MiscControlSpec] = [

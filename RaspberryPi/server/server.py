@@ -58,6 +58,7 @@ class Server(object):
         """
         while True:
             conn, addr = self.socket.accept()
+            print('client connected: ', addr)
             while True:
                 data = conn.recv(4096).decode()
                 print("data received: ", data)

@@ -27,6 +27,7 @@ class SimpleStreamController(StreamControllerI):
 
     def __init__(self, initialize: Callable[[], None], terminate: Callable[[], None], serve: Callable[[], None],
                  stop_serve: Callable[[], None]):
+        print("initializing stream controller")
         self.initialize = initialize
         self.terminate = terminate
         self.serve = serve

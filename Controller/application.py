@@ -102,7 +102,6 @@ if __name__ == "__main__":
         vehicle_controller: VehicleController = VehicleController(args.vehicle_address, args.vehicle_port, args.stream_port)
 
         enabled, misc = configuration_builders[args.config](vehicle_controller)
-        print("args.stream_port",args.stream_port)
         streamer = VideoStreamReceiver(args.stream_port, placeholder_image_name=r"../unnamed.png")
         stream_controller: StreamControllerI = build_stream_configuration(vehicle_controller)
         gui = GUI(viewer=streamer, controller=vehicle_controller, stream_controller=stream_controller, enabled=enabled,

@@ -29,10 +29,14 @@ class CamStreamer(Streamer):
         """
         Initializes connection to the server
         """
-        print("Initializing connection")
-        self.rpi_socket = socket.socket()
-        self.rpi_socket.connect((address, port))
-        self.connection = self.rpi_socket.makefile('wb')
+        print("Initializing connection to client at ", address, ":", port, " ...")
+        try:
+            self.rpi_socket = socket.socket()
+            self.rpi_socket.connect((address, port))
+            self.connection = self.rpi_socket.makefile('wb')
+            print("Connection initialized")
+        except Exception as e:
+            print(f"Error: {e}")
 
     def terminate_connection(self):
         """

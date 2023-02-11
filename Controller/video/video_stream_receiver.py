@@ -80,7 +80,7 @@ class VideoStreamReceiver(VideoViewer):
         # Accept a single connection and make a file-like object out of it
         self.server_socket = create_server(self.port)
         self.connection = self.server_socket.accept()[0].makefile('rb')
-
+        print("video_stream_loop_inner started, waiting for image...")
         try:
             while True:
                 elapsed = time.time()
@@ -98,8 +98,9 @@ class VideoStreamReceiver(VideoViewer):
                 self.display_label.imgtk = img_tk
                 self.display_label.configure(image=img_tk)
                 print("Display took: " + str(elapsed - time.time()))
-        except Exception:
-            print("Something unexpected happened, causing the stream to crash")
+        except Exception as e:
+
+            print(f"Something unexpected happened, causing the stream to crash: {e}")
             return False
         finally:
             self.connection.close()
