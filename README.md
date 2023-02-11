@@ -13,3 +13,6 @@ The devices are
   with [camera](https://www.raspberrypi.org/products/camera-module-v2/). This will host the interface to the car, and
   supply a video feed from its front.
 
+# Commands
+- scp -r RaspberryPi/ pi@192.168.0.38:/home/pi/Desktop/
+- python3 application.py -vehicleAddress=192.168.0.38 -config MiniCar
