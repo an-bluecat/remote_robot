@@ -68,7 +68,7 @@ if __name__ == "__main__":
     }
 
     handler = DictCommandHandler(commands)
-
     args = parser.parse_args()
+
     server = Server(port=args.port, command_handler=handler)
     server.server_loop()

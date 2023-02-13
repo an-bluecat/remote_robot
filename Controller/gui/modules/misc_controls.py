@@ -7,7 +7,7 @@ from typing import List, Dict
 #     from ..model import MiscControlSpec
 import sys
 sys.path.append('../')
-from model import MiscControlSpec
+from Controller.gui.model import MiscControlSpec
 
 class MiscControlsModule(Frame):
     """
@@ -54,8 +54,8 @@ class MiscControlsModule(Frame):
             def on_update():
                 control.on_change(var.get() == 1)
 
-            Radiobutton(frame, variable=var, value=0, state=self.state, command=on_update, text="Off") \
+            Radiobutton(frame, variable=var, value=0, state=self.state, command=on_update, text="Off @deprecated") \
                 .grid(row=1, column=0)
-            Radiobutton(frame, variable=var, value=1, state=self.state, command=on_update, text="On") \
+            Radiobutton(frame, variable=var, value=1, state=self.state, command=on_update, text="On @deprecated") \
                 .grid(row=2, column=0)
         return frame

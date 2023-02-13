@@ -55,6 +55,8 @@ class CamStreamer(Streamer):
         :param time_limit: how many seconds the stream should be served. If <0, stream continues forever
         """
         self.time_limit = time_limit
+        if (self.thread): self.stop_camera_streaming()
+        self.terminate = False
         self.thread = Thread(target=self.serve_footage_loop)
         self.thread.start()
 
@@ -65,10 +67,9 @@ class CamStreamer(Streamer):
         If no limit is given, streaming can be stopped by calling 'stop_camera_streaming'
         """
         print("Serving footage!")
-        self.terminate = False
         # Make a file-like object out of the connection
         with picamera.PiCamera() as camera:
-            camera.resolution = (640, 480)
+            camera.resolution = (1024, 576)
             camera.rotation = 270
             # Start a preview and let the camera warm up for 2 seconds
             camera.start_preview()
@@ -82,7 +83,7 @@ class CamStreamer(Streamer):
             start = time.time()
             stream = io.BytesIO()
 
-            for _ in camera.capture_continuous(stream, 'jpeg'):
+            for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True, thumbnail=None, quality=90):
                 elapsed = time.time()
                 # Write the length of the capture to the stream and flush to
                 # ensure it actually gets sent
@@ -97,7 +98,7 @@ class CamStreamer(Streamer):
                 # Reset the stream for the next capture
                 stream.seek(0)
                 stream.truncate()
-                print("Picture took: " + str(elapsed - time.time()))
+                # print("Picture took: " + str(elapsed - time.time()))
         # Write a length of zero to the stream to signal we're done
         self.connection.write(struct.pack('<L', 0))
         print("No longer serving footage")

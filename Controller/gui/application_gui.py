@@ -2,47 +2,22 @@ from tkinter import *
 from tkinter.font import Font
 from typing import Dict, List
 
-
-import sys, os
-# Get the current directory of the script
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Navigate to the parent directory
-parent_dir = os.path.dirname(current_dir)
-# Append the parent directory to the sys.path list
-sys.path.append(current_dir)
-sys.path.append(parent_dir)
-
-
-# try:
-#     from Controller.gui.model import MiscControlSpec
-#     from Controller.gui.modules import *
-#     from Controller.vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
-#     from Controller.video import VideoViewer, StaticImageViewer
-# except ModuleNotFoundError:
-#     from .model import MiscControlSpec
-#     from .modules import *
-#     from vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
-#     from video import VideoViewer, StaticImageViewer
-# import model
-from model import *
-# from model.misc_control_spec import MiscControlSpec
-from modules import *
-from vehicle_control import VehicleControllerI, ControllerSimulator, StreamControllerI
-from video.static_image_viewer import StaticImageViewer
-from video.video_viewer import VideoViewer
+from Controller.gui.model import *
+from Controller.gui.modules import *
+from Controller.vehicle_control import VehicleControllerI, ControllerSimulator, StreamController
+from Controller.video.static_image_viewer import StaticImageViewer
+from Controller.video.video_viewer import VideoViewer
 
 
 class GUI(Frame):
     """
     Class handling the graphics user interface of the application
     """
-
-    def __init__(self, master: Frame = None,
-                 viewer: VideoViewer = StaticImageViewer(r"../unnamed.png"),
-                 stream_controller: StreamControllerI = StreamControllerI(),
-                 enabled: Dict[str, bool] = None,
-                 controller: VehicleControllerI = ControllerSimulator(),
-                 misc_controls: List[MiscControlSpec] = None):
+    def __init__(self, master:      Frame               = None,
+                 viewer:            VideoViewer         = StaticImageViewer(r"../unnamed.png"),
+                 enabled:           Dict[str, bool]     = None,
+                 controller:        VehicleControllerI  = ControllerSimulator(),
+                 misc_controls:     List[MiscControlSpec] = None):
         """
         Constructor for the graphics user interface
 
@@ -88,7 +63,7 @@ class GUI(Frame):
         self.draw_direction_controls(structure)
         self.draw_information(structure)
 
-        self.draw_cam_feed_controls(master, stream_controller)
+        self.draw_cam_feed_controls(master, StreamController(controller))
         # stream_controller.start_stream()
 
     @staticmethod
@@ -226,31 +201,21 @@ class GUI(Frame):
         frame: Frame = frames["info"]
         InformationFrame(frame, self.version).grid(sticky=N + S + E + W)
 
-    # def draw_cam_feed_controls(self, master: Frame, controller: StreamControllerI) -> None:
-    #     print("Drawing cam feed controls")
-    #     top_bar = Menu(master)
-    #     self.master.config(menu=top_bar)
-
-    #     cam_controls_menu = Menu(top_bar, tearoff=0)
-
-    #     cam_controls_menu.add_command(label="Start Streaming", command=controller.start_stream)
-    #     cam_controls_menu.add_command(label="Stop Steaming", command=controller.stop_stream)
-    #     top_bar.add_cascade(label="Video", menu=cam_controls_menu, underline=0)
-    #     print("Done drawing cam feed controls")
-    def draw_cam_feed_controls(self, master: Frame, controller: StreamControllerI) -> None:
+    def draw_cam_feed_controls(self, master: Frame, stream_controller) -> None:
         top_bar = Menu(master)
         self.master.config(menu=top_bar)
 
         cam_controls_menu = Menu(top_bar, tearoff=0)
 
-        cam_controls_menu.add_command(label="Start Streaming", command=controller.start_stream)
-        cam_controls_menu.add_command(label="Stop Steaming", command=controller.stop_stream)
+        cam_controls_menu.add_command(label="Start Streaming", command=stream_controller.start_stream)
+        cam_controls_menu.add_command(label="Stop Steaming", command=stream_controller.pause_stream)
         top_bar.add_cascade(label="Video", menu=cam_controls_menu, underline=0)
+        self.master.config(menu=top_bar)
 
 if __name__ == "__main__":
     misc_controls_dict: List[MiscControlSpec] = [
         MiscControlSpec(display_name="Lights", on_change=lambda v: print(v), param_type=bool, row=0, column=0)
     ]
     
-    gui = GUI(viewer=StaticImageViewer(r"../../unnamed.png"), misc_controls=misc_controls_dict)
+    gui = GUI(viewer=StaticImageViewer(r"../../cover.png"), misc_controls=misc_controls_dict)
     gui.mainloop()

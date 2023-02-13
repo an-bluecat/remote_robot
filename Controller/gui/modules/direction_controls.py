@@ -1,7 +1,7 @@
 from tkinter import Frame, LabelFrame, Label, N, S, W
 import sys
 sys.path.append('../')
-from components import HorizontalSpinbox
+from Controller.gui.components import HorizontalSpinbox
 from typing import Callable
 
 
