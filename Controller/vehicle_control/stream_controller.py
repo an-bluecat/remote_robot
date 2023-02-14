@@ -1,20 +1,18 @@
 from time import sleep
 from Controller.communication import server_utilities as server, Configurator
+from Controller.vehicle_control import ConnectionManager
 
 
-class StreamController(object):
+class StreamController():
     """
     Stream Controller class, a wrapper for stream operation functions.
     """
-    def __init__(self, vehicleController, message=True):
+    def __init__(self, connect: ConnectionManager, message=True):
         if (message): print("[StreamController] initializing")
-        self.connection = vehicleController.connection
-        self.streamPort = vehicleController.streamport
-        self.__initialize = lambda : server.send(self.connection, "STREAM-INITIALIZE;" + Configurator.get_local_ip() +
-                                                 ";"+ str(self.streamPort))
-        self.__terminate  = lambda : server.send(self.connection, "STREAM-TERMINATE;")
-        self.__serve      = lambda : server.send(self.connection, "STREAM-SERVE-FOOTAGE;")
-        self.__stop_serve = lambda : server.send(self.connection, "STREAM-STOP-STREAMING;")
+        self.__initialize = lambda : connect.send("STREAM-INITIALIZE", connect.localIP, connect.streamPort)
+        self.__terminate  = lambda : connect.send("STREAM-TERMINATE")
+        self.__serve      = lambda : connect.send("STREAM-SERVE-FOOTAGE")
+        self.__stop_serve = lambda : connect.send("STREAM-STOP-STREAMING")
         self.streamInitialized = False
         self.__message = message
 

@@ -1,32 +1,6 @@
 import threading
 from tkinter import Frame, LabelFrame, Label
-import sys, os
-
-# Get the current directory of the script
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Navigate to the parent directory
-parent_dir = os.path.dirname(current_dir)
-parent_dir = os.path.dirname(parent_dir)
-# Append the parent directory to the sys.path list
-sys.path.append(parent_dir)
-# sys.path.append('../video')
-# import video.video_viewer
-# import video_viewer
-# import video.video_viewer
-import os
-from video import video_viewer
-from video.video_viewer import VideoViewer
-# from Controller.video import VideoViewer
-
-
-
-
-
-
-# try:
-#     from Controller.video import VideoViewer
-# except ModuleNotFoundError:
-#     from video import VideoViewer
+from Controller.video import VideoReceiver
 
 
 class StreamFrame(Frame):
@@ -34,7 +8,7 @@ class StreamFrame(Frame):
     Container for video-stream display
     """
 
-    def __init__(self, parent, viewer: VideoViewer):
+    def __init__(self, parent, viewer: VideoReceiver):
         """
         :param parent: parent frame to render content in
         :param viewer: the viewer used in interfacing with stream source

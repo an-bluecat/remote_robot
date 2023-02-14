@@ -1,3 +1,3 @@
-from .application_gui import GUI
+from .application_gui import ApplicationGUI
 
-__all__ = ["GUI"]
+__all__ = ["ApplicationGUI"]

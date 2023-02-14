@@ -2,21 +2,6 @@
 import socket
 import time
 
-
-# def create_server(port: int) -> socket:
-#     """
-#     Establishes a connection to a server
-
-#     :param port: port to be used
-#     :return: socket with an active connection to the specified server
-#     """
-#     print("creating server on port " + str(port))
-#     server = socket.socket()
-#     server.bind((socket.gethostname(), port))
-#     server.listen(0)
-#     print("server started on " + str(socket.gethostname()) + ":" + str(port))
-#     return server
-
 def create_server(port: int) -> socket:
     """
     Establishes a connection to a server
@@ -24,7 +9,6 @@ def create_server(port: int) -> socket:
     :param port: port to be used
     :return: socket with an active connection to the specified server
     """
-    print("Creating server on port " + str(port))
     server = socket.socket()
     try:
         server.bind((socket.gethostname(), port))
@@ -34,9 +18,6 @@ def create_server(port: int) -> socket:
         time.sleep(1)
         print("Listening on address: ", server.getsockname()[0])
         print("Listening on port: ", server.getsockname()[1])
-        # addrs = socket.getaddrinfo(host_name, None)
-        # print("addresses: " + str(addrs))
-        # print("verify server is listening: " + str(is_server_listening(host_ip, port)))
 
         return server
     except Exception as e:
@@ -86,9 +67,6 @@ def send(conn: socket, msg: str, msg_length: int = 4096) -> bool:
     :param msg_length: length of the message to be sent. Default is 4096
     :return: whether a response has been received and logged to terminal
     """
-
-    print("[Sending message] " + str(msg))
-
     conn.send(msg.encode())
     from_server = conn.recv(msg_length).decode()
     if not from_server:
@@ -108,22 +86,3 @@ def terminate(conn: socket) -> None:
     :param conn: connection to be terminated
     """
     conn.close()
-
-
-def run_test() -> None:
-    """
-    executes a test of the connector, connecting to a socket server at 127.0.0.1:8080,
-    then takes input in a while(True) loop, which can be broken with input='q'
-    each input different from "q" is sent to the server
-    """
-    client = connect("127.0.0.1", 8080)
-    while True:
-        inp = input("Input:")
-        if inp == 'q':
-            break
-        send(client, inp)
-    terminate(client)
-
-
-if __name__ == "__main__":
-    run_test()

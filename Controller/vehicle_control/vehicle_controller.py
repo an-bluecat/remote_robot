@@ -1,31 +1,23 @@
-import socket
-
-from .vehicle_controller_interface import VehicleControllerI
-from Controller.communication import server_utilities as server, Configurator
+from Controller.vehicle_control import ConnectionManager
 
 
-class VehicleController(VehicleControllerI):
-    """
-    Controller implementation communicating with the RC vehicle
-    """
-
-    def __init__(self, address: str, port: int, streamport: int = 8000):
-        
-        print("initializing vehicle controller, ", "address: ", address, " port: ", port)
-        self.streamport=streamport
-        self.connection: socket = server.connect(address, port)
+""" A Class for Controls and Communication with the Vehicle
+"""
+class VehicleController():
+    def __init__(self, connect: ConnectionManager):
+        self.connect = connect
 
     def set_drive(self, val: int) -> None:
-        server.send(self.connection, "DRIVE;" + str(val))
+        self.connect.send("DRIVE", val)
 
     def set_gear(self, val: int) -> None:
-        server.send(self.connection, "GEAR;" + str(val))
+        self.connect.send("GEAR", val)
 
     def set_throttle(self, val: int) -> None:
-        server.send(self.connection, "THROTTLE;" + str(val))
+        self.connect.send("THROTTLE", val)
 
     def set_direction(self, val: int) -> None:
-        server.send(self.connection, "DIRECTION;" + str(val))
+        self.connect.send("DIRECTION", val)
 
     def set_lights(self, val: int) -> None:
-        server.send(self.connection, "LIGHT;" + str(val))
+        self.connect.send("LIGHT", val)
