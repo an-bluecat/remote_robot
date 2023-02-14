@@ -15,11 +15,7 @@ class VideoReceiver():
     def __init__(self, connect: ConnectionManager, coverImage=r"../cover.png"):
         self.connect = connect
         self.image = coverImage
-        self.display_label = None
-
-    def set_label(self, display_label: Label):
-        self.display_label = display_label
-        self.set_coverImage()
+        self.display_label = [None] * 2 #double buffering
 
     def set_coverImage(self):
         """
@@ -31,9 +27,15 @@ class VideoReceiver():
             os.chdir(curDir+"/remote_robot/Controller/")
         if self.image:
             image: PhotoImage = PhotoImage(file=r"../cover.png")
-            self.display_label.imgtk = image
-            self.display_label.configure(image=image)
+            self.display_label[0].imgtk = image
+            self.display_label[0].configure(image=image)
+            self.display_label[1].imgtk = image
+            self.display_label[1].configure(image=image)
         os.chdir(curDir)
+
+    def set_labels(self, display_labels):
+        self.display_label = display_labels
+        self.set_coverImage()
 
     def loop_repeater(self, func: Callable[[], bool]) -> None:
         """
@@ -76,8 +78,9 @@ class VideoReceiver():
                 image_stream.seek(0)
                 image = Image.open(image_stream)
                 img_tk = ImageTk.PhotoImage(image=image)
-                self.display_label.imgtk = img_tk
-                self.display_label.configure(image=img_tk)
+                self.display_label[(frameCounter+1)%2].lift()
+                self.display_label[frameCounter%2].imgtk = img_tk
+                self.display_label[frameCounter%2].configure(image=img_tk)
 
                 frameCounter = (frameCounter+1) % 30
                 frameRate -= frameTime[frameCounter]

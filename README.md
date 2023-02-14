@@ -15,4 +15,5 @@ The devices are
 
 # Commands
 - scp -r RaspberryPi/ pi@192.168.0.38:/home/pi/Desktop/
+- windows: scp -r .\RaspberryPi pi@192.168.2.31:/home/pi/Desktop/
 - python3 application.py -vehicleAddress=192.168.0.38 -config MiniCar

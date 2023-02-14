@@ -16,9 +16,10 @@ class StreamFrame(Frame):
         Frame.__init__(self, parent)
 
         self.misc_controls_frame: LabelFrame = LabelFrame(parent, text="Video Stream")
-        label = Label(self.misc_controls_frame)
-        label.grid(row=0, column=0, columnspan=2, rowspan=2, padx=5, pady=5)
-        viewer.set_label(label)
+        label = [ Label(self.misc_controls_frame), Label(self.misc_controls_frame) ]
+        label[0].grid(row=0, column=0, columnspan=2, rowspan=2, padx=5, pady=5)
+        label[1].grid(row=0, column=0, columnspan=2, rowspan=2, padx=5, pady=5)
+        viewer.set_labels(label)
         stream_thread = threading.Thread(target=viewer.video_stream_loop)
         stream_thread.start()
 

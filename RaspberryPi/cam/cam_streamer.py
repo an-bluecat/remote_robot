@@ -68,7 +68,7 @@ class CamStreamer(Streamer):
         """
         print("Serving footage!")
         # Make a file-like object out of the connection
-        with picamera.PiCamera() as camera:
+        with picamera.PiCamera(framerate=30) as camera:
             camera.resolution = (1024, 576)
             camera.rotation = 270
             # Start a preview and let the camera warm up for 2 seconds
@@ -83,7 +83,7 @@ class CamStreamer(Streamer):
             start = time.time()
             stream = io.BytesIO()
 
-            for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True, thumbnail=None, quality=90):
+            for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True, thumbnail=None, quality=10):
                 elapsed = time.time()
                 # Write the length of the capture to the stream and flush to
                 # ensure it actually gets sent
@@ -98,7 +98,7 @@ class CamStreamer(Streamer):
                 # Reset the stream for the next capture
                 stream.seek(0)
                 stream.truncate()
-                # print("Picture took: " + str(elapsed - time.time()))
+                #print("Picture took: " + str(1/(elapsed - time.time())))
         # Write a length of zero to the stream to signal we're done
         self.connection.write(struct.pack('<L', 0))
         print("No longer serving footage")
