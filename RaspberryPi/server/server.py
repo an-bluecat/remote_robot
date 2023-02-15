@@ -1,15 +1,12 @@
 # Python program to implement server of controller software
-import argparse
 import socket
 
 try:
-    from RaspberryPi.cam import Streamer
-    from RaspberryPi.server.command_handler import CommandHandler
-    from RaspberryPi.server.printing_command_handler import PrintingCommandHandler
-except ModuleNotFoundError:
     from cam import Streamer
     from server.command_handler import CommandHandler
-    from server.printing_command_handler import PrintingCommandHandler
+except ModuleNotFoundError:
+    from RaspberryPi.cam import Streamer
+    from RaspberryPi.server.command_handler import CommandHandler
 
 
 class Server(object):
@@ -17,9 +14,7 @@ class Server(object):
     Hosts server as an interface for the RC vehicle
     """
 
-    def __init__(self, port: int = 8080,
-                 command_handler: CommandHandler = PrintingCommandHandler(),
-                 streamer: Streamer = Streamer()):
+    def __init__(self, command_handler: CommandHandler, port: int = 8080, streamer: Streamer = Streamer()):
         """
         :param port: port to host the server one
         """
@@ -72,15 +67,5 @@ class Server(object):
                     conn.send("nack".encode("UTF-8"))
                     print("data received is NOT a valid command")
 
-                
             conn.close()
             print('client disconnected')
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-port", dest="port", default=8080, type=int)
-
-    args = parser.parse_args()
-    server = Server(port=args.port)
-    server.server_loop()

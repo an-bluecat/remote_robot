@@ -79,7 +79,7 @@ class CamStreamer(Streamer):
             # Note the start time and construct a stream to hold image data
             # temporarily (we could write it directly to connection but in this
             # case we want to find out the size of each capture first to keep
-            # our protocol simple)
+            # our protocol.py simple)
             start = time.time()
             stream = io.BytesIO()
 
@@ -110,12 +110,3 @@ class CamStreamer(Streamer):
         self.terminate = True
         self.thread.join()
         self.thread = None
-
-
-if __name__ == "__main__":
-    streamer = CamStreamer()
-    try:
-        streamer.initialize_connection('192.168.0.31', 8000)
-        streamer.serve_footage(-1)
-    finally:
-        streamer.terminate_connection()

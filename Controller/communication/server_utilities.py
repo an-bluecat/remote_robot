@@ -67,8 +67,12 @@ def send(conn: socket, msg: str, msg_length: int = 4096) -> bool:
     :param msg_length: length of the message to be sent. Default is 4096
     :return: whether a response has been received and logged to terminal
     """
-    conn.send(msg.encode())
-    from_server = conn.recv(msg_length).decode()
+    try:
+        conn.send(msg.encode())
+        from_server = conn.recv(msg_length).decode()
+    except OSError as e:
+        print(e)
+        return False
     if not from_server:
         return False
     if not "ack" == str(from_server):

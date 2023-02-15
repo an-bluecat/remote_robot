@@ -1,4 +1,5 @@
 from Controller.vehicle_control import ConnectionManager
+from RaspberryPi.communication import NetworkCommands as Command
 
 
 """ A Class for Controls and Communication with the Vehicle
@@ -6,18 +7,10 @@ from Controller.vehicle_control import ConnectionManager
 class VehicleController():
     def __init__(self, connect: ConnectionManager):
         self.connect = connect
+        self.throttle = [0] * 4
 
-    def set_drive(self, val: int) -> None:
-        self.connect.send("DRIVE", val)
+    def setMaxThrottle(self, val: int) -> None: # Note: THESE ARE PLACEHOLDERS, to be implemented
+        self.connect.send(Command.CONTROL_THROTTLE, val)
 
-    def set_gear(self, val: int) -> None:
-        self.connect.send("GEAR", val)
-
-    def set_throttle(self, val: int) -> None:
-        self.connect.send("THROTTLE", val)
-
-    def set_direction(self, val: int) -> None:
-        self.connect.send("DIRECTION", val)
-
-    def set_lights(self, val: int) -> None:
-        self.connect.send("LIGHT", val)
+    def setInput(self, val: int) -> None:
+        self.connect.send(Command.CONTROL_INPUT, val)

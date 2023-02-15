@@ -1,7 +1,4 @@
 from tkinter import Frame, LabelFrame, Label, N, S, W
-import sys
-sys.path.append('../')
-from Controller.gui.components import HorizontalSpinbox
 from typing import Callable
 
 
@@ -27,8 +24,8 @@ class DirectionControls(Frame):
         Label(direction_controls_frame, justify="left", text=label_text, wraplength=170, anchor=N + W, width=23) \
             .grid(row=0, column=0, sticky=N + S + W)
 
-        HorizontalSpinbox(direction_controls_frame, from_=0, to_=2, start=1, increment=1, state=state,
-                          on_update=set_direction).grid(row=0, column=1, padx=5, pady=5)
+#        HorizontalSpinbox(direction_controls_frame, from_=0, to_=2, start=1, increment=1, state=state,
+#                          on_update=set_direction).grid(row=0, column=1, padx=5, pady=5)
 
     def grid(self, row: int = 0, column: int = 0, **kwargs) -> None:
         """

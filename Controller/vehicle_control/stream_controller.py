@@ -1,5 +1,5 @@
 from time import sleep
-from Controller.communication import server_utilities as server, Configurator
+from RaspberryPi.communication import NetworkCommands as Command
 from Controller.vehicle_control import ConnectionManager
 
 
@@ -9,30 +9,30 @@ class StreamController():
     """
     def __init__(self, connect: ConnectionManager, message=True):
         if (message): print("[StreamController] initializing")
-        self.__initialize = lambda : connect.send("STREAM-INITIALIZE", connect.localIP, connect.streamPort)
-        self.__terminate  = lambda : connect.send("STREAM-TERMINATE")
-        self.__serve      = lambda : connect.send("STREAM-SERVE-FOOTAGE")
-        self.__stop_serve = lambda : connect.send("STREAM-STOP-STREAMING")
+        self.__initialize = lambda : connect.send(Command.STREAM_INIT, connect.localIP, connect.streamPort)
+        self.__terminate  = lambda : connect.send(Command.STREAM_TERMINATE)
+        self.__serve      = lambda : connect.send(Command.STREAM_START)
+        self.__stop_serve = lambda : connect.send(Command.STREAM_STOP)
         self.streamInitialized = False
         self.__message = message
 
-    def start_stream(self) -> None:
+    def start_stream(self) -> bool:
         if (self.__message): print("[StreamController] client requesting stream Start")
-        if (not self.streamInitialized): self.__initialize()
-        self.streamInitialized = True
-        self.__serve()
+        if (not self.streamInitialized): self.streamInitialized = self.__initialize()
+        return self.__serve() if (self.streamInitialized) else False
 
-    def stop_stream(self) -> None:
+    def stop_stream(self) -> bool:
         if (self.__message): print("[StreamController] client requesting stream Terminate")
-        self.__stop_serve()
-        sleep(1)
-        self.streamInitialized = False
-        self.__terminate()
+        if (self.__stop_serve()):
+            sleep(1)
+            self.streamInitialized = not self.__terminate()
+            return not self.streamInitialized
+        return False
 
-    def pause_stream(self) -> None:
+    def pause_stream(self) -> bool:
         if (self.__message): print("[StreamController] client requesting stream Pause")
-        self.__stop_serve()
+        return self.__stop_serve()
 
-    def resume_stream(self) -> None:
+    def resume_stream(self) -> bool:
         if (self.__message): print("[StreamController] client requesting stream Resume")
-        self.__serve()
+        return self.__serve()
