@@ -1,6 +1,5 @@
 # Python program to implement client side of the control-flow
 import socket
-import time
 
 def create_server(port: int) -> socket:
     """
@@ -13,11 +12,7 @@ def create_server(port: int) -> socket:
     try:
         server.bind((socket.gethostname(), port))
         server.listen(5)
-        host_name = socket.gethostname()
-        host_ip = socket.gethostbyname(host_name)
-        time.sleep(1)
-        print("Listening on address: ", server.getsockname()[0])
-        print("Listening on port: ", server.getsockname()[1])
+        print("Listening on address:", server.getsockname()[0], "port", server.getsockname()[1])
 
         return server
     except Exception as e:
@@ -75,7 +70,7 @@ def send(conn: socket, msg: str, msg_length: int = 4096) -> bool:
         return False
     if not from_server:
         return False
-    if not "ack" == str(from_server):
+    if not "ACK" == str(from_server):
         print("Received message different from 'ack' as response. Terminating connection. Response was: "
               + str(from_server))
         terminate(conn)

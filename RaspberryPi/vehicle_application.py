@@ -1,22 +1,22 @@
 import argparse
-from cam import CamStreamer
-from communication import functionWrapper
-from server import Server, DictCommandHandler
-from micro_controller import VehicleController
+from communication import NetworkCommands, PI_ServerManager, StreamingCAM
+from modules import DriveController
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-port", dest="port", default=8080, type=int)
-
-    cam_streamer = CamStreamer()
-
-    vehicle_controller = VehicleController()
-
-    commands = functionWrapper(cam_streamer)
-
-    handler = DictCommandHandler(commands)
     args = parser.parse_args()
 
-    server = Server(port=args.port, command_handler=handler)
-    server.server_loop()
+    command = NetworkCommands(DriveController(), StreamingCAM())
+
+#-----------------------------------------------------------------------------------------------------------------------
+    while (True):                                                   #Server Main Loop
+        serverManager = PI_ServerManager(args.port, command)
+        if (not serverManager.connect()):                           #Keep Listening to Client Connections
+            continue
+        while (True):
+            data = serverManager.receive()                          #Handle Commands from Client
+            if (not data or command.handleCommand(data)): break
+        serverManager.server.close()
+        serverManager.connection.close()

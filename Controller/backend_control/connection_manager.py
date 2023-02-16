@@ -1,5 +1,5 @@
 import socket
-from Controller.communication import server_utilities as server
+from ..communication import server_utilities as server
 from RaspberryPi.communication import NetworkCommands as Command
 
 
@@ -28,16 +28,18 @@ class ConnectionManager():
 
     def disconnect(self) -> bool:
         if (not self.isConnected): return True
+        self.send(Command.DISCONNECT)
         self.connection.close()
         self.connection = None
         self.isConnected = False
+        self.isServerActive = False
         if (self.__message): print("[ConnectionManager] closing connection")
         return self.isConnected
 
     def send(self, command: str, *params) -> bool:
         for param in params: command += ";" + str(param)
-        ack = server.send(self.connection, command, len(command))
-        if (self.__message): print("[ConnectionManager] sending message:", command, "[SUCCESS]" if ack else None)
+        ack = server.send(self.connection, command, 5)
+        if (self.__message): print("[ConnectionManager] sending message:", command," [SUCCESS]" if ack else " [FAILED]")
         return ack
 
     def createSever(self):
@@ -48,6 +50,7 @@ class ConnectionManager():
                                    "port", self.streamPort, " [SUCCESS]" if self.isConnected else " [FAILED]")
 
     def closeServer(self):
+        if (not self.server): return
         self.server.close()
         self.__serverSocket.close()
         self.server: socket = None

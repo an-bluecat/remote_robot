@@ -1,23 +1,18 @@
-#
 import io
 import socket
 import struct
 import time
 from threading import Thread
-
 try:
     import picamera
-except ModuleNotFoundError:
-    print("Failed to import picamera module - cam wont be usable")
-
-from .streamer import Streamer
+except ModuleNotFoundError as e:
+    print("No camera module", e)
 
 
-class CamStreamer(Streamer):
+class StreamingCAM():
     """
     Utilizes the RPI cam to serve a stream
     """
-
     def __init__(self):
         self.rpi_socket: socket = None
         self.connection = None
@@ -51,7 +46,6 @@ class CamStreamer(Streamer):
     def serve_footage(self, time_limit: int = -1) -> None:
         """
         Starts serving video footage in separate thread
-
         :param time_limit: how many seconds the stream should be served. If <0, stream continues forever
         """
         self.time_limit = time_limit
@@ -107,6 +101,7 @@ class CamStreamer(Streamer):
         """
         Requests that the streamer stops streaming the camera feed
         """
+        if (not self.thread): return
         self.terminate = True
         self.thread.join()
         self.thread = None
