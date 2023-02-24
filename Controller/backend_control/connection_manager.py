@@ -43,7 +43,7 @@ class ConnectionManager():
         return ack
 
     def createSever(self):
-        self.__serverSocket = server.create_server(self.streamPort)
+        self.__serverSocket = server.create_server(self.localIP, self.streamPort)
         self.server = self.__serverSocket.accept()[0].makefile('rb') if (self.__serverSocket) else None
         self.isServerActive = self.server is not None
         if (self.__message): print("[ConnectionManager] establishing streaming sever:", self.address,
