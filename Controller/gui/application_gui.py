@@ -1,11 +1,14 @@
 import tkinter as tk
 import tkinter.messagebox
 from Controller.backend_control import ConnectionManager, VehicleController, StreamController, VideoStreamer
-
+import pygame
 
 class ApplicationGUI(tk.Tk):
     def __init__(self, args, title="Remote Robot Control Application", **kwargs):
         super().__init__(screenName=title, **kwargs)
+        # # Initialize the pygame library
+        pygame.init()
+        pygame.joystick.init()
 
         self.title(title)
         self.version = "0.1.0"
@@ -18,6 +21,43 @@ class ApplicationGUI(tk.Tk):
         self.menu_deviceControl = None
         self.displayMenu()
 
+# Schedule the joystick update task
+        self.after(50, self.update_joystick)
+
+        # Schedule the print task
+        self.after(500, self.print_axes)
+
+    def update_joystick(self):
+        if not pygame.joystick.get_count():
+            return []
+
+        joystick = pygame.joystick.Joystick(0)
+        joystick.init()
+
+        # Get the number of axes
+        num_axes = joystick.get_numaxes()
+
+        # Handle joystick events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        # Get joystick axes values
+        axes = [joystick.get_axis(i) for i in range(num_axes)]
+
+        # Schedule the next update
+        self.after(50, self.update_joystick)
+
+        return axes
+
+    def print_axes(self):
+        # Get joystick axes values
+        axes = self.update_joystick()
+        # Print the axes values
+        print("Axes: ", axes)
+        # Schedule the next print
+        self.after(500, self.print_axes)
 
     def displayMenu(self):
         menubar = tk.Menu(self)
