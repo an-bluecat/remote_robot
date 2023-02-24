@@ -28,7 +28,13 @@ class ApplicationGUI(tk.Tk):
         self.menu_deviceControl.add_command(label="Start Streaming",   command=lambda: menu_onSteamStart(self))
         self.menu_deviceControl.add_command(label="Stop Steaming",     command=lambda: menu_onSteamStop(self))
         menubar.add_cascade(label="Device", menu=self.menu_deviceControl, underline=0)
+        
+        # Add an "About" menu with an "Instructions" option
+        self.menu_about = tk.Menu(menubar, tearoff=0)
+        self.menu_about.add_command(label="Instructions", command=lambda: menu_onInstructions(self))
+        menubar.add_cascade(label="About", menu=self.menu_about, underline=0)
 
+        # Disable certain menu options at start
         self.menu_deviceControl.entryconfig("Disconnect Device", state="disabled")
         self.menu_deviceControl.entryconfig("Start Streaming", state="disabled")
         self.menu_deviceControl.entryconfig("Stop Steaming", state="disabled")
@@ -39,6 +45,16 @@ class ApplicationGUI(tk.Tk):
 #-----------------------------------------------------------------------------------------------------------------------
 """ The Section Below are Functions for the GUI Menu
 """
+
+def menu_onInstructions(gui: ApplicationGUI):                     #Show Instructions
+    instructions = "Instructions:\n\n" \
+                   "1. Connect to the device by clicking 'Connect to Device' in the 'Device' menu.\n\n" \
+                   "2. Once connected, start streaming by clicking 'Start Streaming'. The video feed will appear in a new window.\n\n" \
+                   "3. To pause the streaming, click 'Stop Streaming'.\n\n" \
+                   "4. To disconnect from the device, click 'Disconnect Device' in the 'Device' menu."
+    tk.messagebox.showinfo(title="About", message=instructions)
+
+
 def menu_onConnect(gui: ApplicationGUI):                            #Connect to Device
     if (gui.connectionManager.isConnected): return
     if (gui.connectionManager.connect()):
