@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.messagebox
 from Controller.backend_control import ConnectionManager, VehicleController, StreamController, VideoStreamer
 import pygame
+import math
 
 class ApplicationGUI(tk.Tk):
     def __init__(self, args, title="Remote Robot Control Application", **kwargs):
@@ -21,11 +22,9 @@ class ApplicationGUI(tk.Tk):
         self.menu_deviceControl = None
         self.displayMenu()
 
-# Schedule the joystick update task
-        self.after(50, self.update_joystick)
+        # Schedule the joystick update task
 
-        # Schedule the print task
-        self.after(500, self.print_axes)
+        self.print_axes()
 
     def update_joystick(self):
         if not pygame.joystick.get_count():
@@ -47,17 +46,86 @@ class ApplicationGUI(tk.Tk):
         axes = [joystick.get_axis(i) for i in range(num_axes)]
 
         # Schedule the next update
-        self.after(50, self.update_joystick)
+        # self.after(50, self.update_joystick)
 
         return axes
 
     def print_axes(self):
         # Get joystick axes values
         axes = self.update_joystick()
+
         # Print the axes values
         print("Axes: ", axes)
+
+        # Round the values to 2 decimal places, otherwise 0 will be sometimes 0.0023 or something
+        axes = [round(axis, 2) for axis in axes]
+
+        right, left = self.joystickToDiff(axes[0], -axes[1], -1, 1, -100, 100) 
+        print("Left: ", left, "Right: ", right, )
+
+
         # Schedule the next print
-        self.after(500, self.print_axes)
+        self.after(500, self.print_axes)  # NOTE change this to 50ms in the final version
+
+
+    def joystickToDiff(self, x, y, minJoystick, maxJoystick, minSpeed, maxSpeed):
+        # If x and y are 0, then there is not much to calculate...
+        if x == 0 and y == 0:
+            return (0, 0)
+
+        # First Compute the angle in deg
+        # First hypotenuse
+        z = math.sqrt(x * x + y * y)
+
+        # angle in radians
+        rad = math.acos(math.fabs(x) / z)
+
+        # and in degrees
+        angle = rad * 180 / math.pi
+
+        # Now angle indicates the measure of turn
+        # Along a straight line, with an angle o, the turn co-efficient is same
+        # this applies for angles between 0-90, with angle 0 the coeff is -1
+        # with angle 45, the co-efficient is 0 and with angle 90, it is 1
+
+        tcoeff = -1 + (angle / 90) * 2
+        turn = tcoeff * math.fabs(math.fabs(y) - math.fabs(x))
+        turn = round(turn * 100, 0) / 100
+
+        # And max of y or x is the movement
+        mov = max(math.fabs(y), math.fabs(x))
+
+        # First and third quadrant
+        if (x >= 0 and y >= 0) or (x < 0 and y < 0):
+            rawLeft = mov
+            rawRight = turn
+        else:
+            rawRight = mov
+            rawLeft = turn
+
+        # Reverse polarity
+        if y < 0:
+            rawLeft = 0 - rawLeft
+            rawRight = 0 - rawRight
+
+        # minJoystick, maxJoystick, minSpeed, maxSpeed
+        # Map the values onto the defined rang
+        rightOut = self.map(rawRight, minJoystick, maxJoystick, minSpeed, maxSpeed)
+        leftOut = self.map(rawLeft, minJoystick, maxJoystick, minSpeed, maxSpeed)
+
+        return (rightOut, leftOut)
+
+
+
+    def map(self, v, in_min, in_max, out_min, out_max):
+        # Check that the value is at least in_min
+        if v < in_min:
+            v = in_min
+        # Check that the value is at most in_max
+        if v > in_max:
+            v = in_max
+        return (v - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
+
 
     def displayMenu(self):
         menubar = tk.Menu(self)
