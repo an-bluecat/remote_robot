@@ -24,7 +24,7 @@ class ApplicationGUI(tk.Tk):
 
         # Schedule the joystick update task
 
-        self.print_axes()
+        # self.sendJoystickCommand()
 
     def update_joystick(self):
         if not pygame.joystick.get_count():
@@ -50,22 +50,25 @@ class ApplicationGUI(tk.Tk):
 
         return axes
 
-    def print_axes(self):
+    def sendJoystickCommand(self, stop=False):
         # Get joystick axes values
         axes = self.update_joystick()
 
-        # Print the axes values
-        print("Axes: ", axes)
+        
 
         # Round the values to 2 decimal places, otherwise 0 will be sometimes 0.0023 or something
         axes = [round(axis, 2) for axis in axes]
+        # Print the axes values
+        print("Axes: ", axes)
 
         right, left = self.joystickToDiff(axes[0], -axes[1], -1, 1, -100, 100) 
-        print("Left: ", left, "Right: ", right, )
+        print("Left: ", left, "Right: ", right)
 
+        self.vehicleController.setInput([left, right])
 
         # Schedule the next print
-        self.after(500, self.print_axes)  # NOTE change this to 50ms in the final version
+        if not stop:
+            self.after(500, self.sendJoystickCommand)  # NOTE change this to 50ms in the final version
 
 
     def joystickToDiff(self, x, y, minJoystick, maxJoystick, minSpeed, maxSpeed):
@@ -147,6 +150,12 @@ class ApplicationGUI(tk.Tk):
         self.menu_deviceControl.entryconfig("Start Streaming", state="disabled")
         self.menu_deviceControl.entryconfig("Stop Steaming", state="disabled")
 
+        # Add a "Controller Input" menu with a "Start Controller Input" option
+        self.menu_controllerInput = tk.Menu(menubar, tearoff=0)
+        self.menu_controllerInput.add_command(label="Start Controller Input", command=lambda: menu_onInputStart(self))
+        self.menu_controllerInput.add_command(label="Stop Controller Input", command=lambda: menu_onInputStop(self))
+        menubar.add_cascade(label="Controller Input", menu=self.menu_controllerInput, underline=0)
+
         self.config(menu=menubar)
 
 
@@ -195,3 +204,17 @@ def menu_onSteamStop(gui: ApplicationGUI):                          #Pause Video
     if (not gui.streamController.pause_stream()): return
     gui.menu_deviceControl.entryconfig("Stop Steaming", state="disabled")
     gui.menu_deviceControl.entryconfig("Start Streaming", state="normal")
+
+
+
+def menu_onInputStart(gui: ApplicationGUI):
+    gui.sendJoystickCommand()
+    gui.menu_controllerInput.entryconfig("Start Controller Input", state="disabled")
+    gui.menu_controllerInput.entryconfig("Stop Controller Input", state="normal")
+
+def menu_onInputStop(gui: ApplicationGUI):
+    gui.after_cancel(gui.sendJoystickCommand(stop=True))
+    gui.vehicleController.setInput([0, 0])
+    gui.menu_controllerInput.entryconfig("Start Controller Input", state="normal")
+    gui.menu_controllerInput.entryconfig("Stop Controller Input", state="disabled")
+

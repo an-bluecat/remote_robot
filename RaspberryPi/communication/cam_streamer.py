@@ -70,7 +70,7 @@ class StreamingCAM():
             time.sleep(2)
             camera.stop_preview()
 
-            # Note the start time and construct a stream to hold image data
+            # the start time and construct a stream to hold image data
             # temporarily (we could write it directly to connection but in this
             # case we want to find out the size of each capture first to keep
             # our protocol.py simple)
