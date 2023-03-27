@@ -14,6 +14,8 @@ The devices are
   supply a video feed from its front.
 
 # Commands
-- scp -r RaspberryPi/ pi@192.168.0.38:/home/pi/Desktop/
-- windows: scp -r .\RaspberryPi pi@192.168.2.31:/home/pi/Desktop/
+- scp -r -P80 RaspberryPi/ pi@192.168.0.38:/home/pi/Desktop/
+- windows: scp -r -P80 .\RaspberryPi pi@192.168.2.31:/home/pi/Desktop/
+- Controller jerryyu$ python3 application.py -vehicleAddress=192.168.0.64 -streamPort 8080
+
 - python3 application.py -vehicleAddress=192.168.0.38 -config MiniCar
