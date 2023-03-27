@@ -33,8 +33,8 @@ class NetworkCommands():
             self.STREAM_STOP:      lambda args: streamer.stop_camera_streaming(),
             self.STREAM_TERMINATE: lambda args: streamer.terminate_connection(),
 
-            self.CONTROL_THROTTLE: lambda args: driver.setMaxThrottle(args[1:]),
-            self.CONTROL_INPUT:    lambda args: driver.setInput(args[1:])
+            self.CONTROL_THROTTLE: lambda args: driver.setMaxThrottle(args),
+            self.CONTROL_INPUT:    lambda args: driver.setInput(args)
         }
 
 #-----------------------------------------------------------------------------------------------------------------------

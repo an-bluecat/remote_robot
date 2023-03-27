@@ -1,6 +1,7 @@
+import sys
+sys.path.append("/Users/jerryyu/Documents/project/capstone/remote_robot")
 import argparse
 from gui.application_gui import ApplicationGUI
-
 
 """ Use this command in the capstone folder:
  >> python application.py -vehicleAddress=192.168.2.31 -streamPort 8080
