@@ -1,7 +1,7 @@
 # Python program to implement client side of the control-flow
 import socket
 
-def create_server(port: int) -> socket:
+def create_server(addr: str, port: int) -> socket:
     """
     Establishes a connection to a server
 
@@ -10,8 +10,8 @@ def create_server(port: int) -> socket:
     """
     server = socket.socket()
     try:
-        server.bind((socket.gethostname(), port))
-        server.listen(5)
+        server.bind((addr, port))
+        server.listen(1)
         print("Listening on address:", server.getsockname()[0], "port", server.getsockname()[1])
 
         return server
