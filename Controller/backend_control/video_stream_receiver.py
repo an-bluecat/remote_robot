@@ -2,7 +2,7 @@ import io
 import struct
 import time
 from tkinter import *
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image  #>> pip install pillow
 from ..backend_control import ConnectionManager
 
 

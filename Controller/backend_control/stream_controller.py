@@ -4,8 +4,7 @@ from RaspberryPi.communication import NetworkCommands as Command
 
 
 class StreamController():
-    """
-    Stream Controller class, a wrapper for stream operation functions.
+    """ Stream Controller class, a wrapper for stream operation functions.
     """
     def __init__(self, connect: ConnectionManager, streamer, message=True):
         self.__initialize = lambda : connect.send(Command.STREAM_INIT, connect.localIP, connect.streamPort)

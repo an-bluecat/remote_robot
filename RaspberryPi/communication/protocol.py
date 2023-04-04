@@ -2,7 +2,7 @@ from .cam_streamer import StreamingCAM
 try:
     from modules import DriveController
 except ModuleNotFoundError:
-    from ..modules import DriveController
+    DriveController = int
 
 """ An abstract class for All Vehicle to Client Network Communication Commands
     IMPORTANT: only using this class to add handshake functions
