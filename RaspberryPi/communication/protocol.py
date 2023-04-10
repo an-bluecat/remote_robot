@@ -17,8 +17,7 @@ class NetworkCommands():
     STREAM_STOP      = "STRM_STOP"
     STREAM_TERMINATE = "STRM_TERM"
 
-    CONTROL_THROTTLE = "CTRL_THROT"                                 #"CTRL_THROT;255;255;255;255"
-    CONTROL_INPUT    = "CTRL_DRIVE"
+    CONTROL_INPUT    = "CTRL_DRIVE"                                 #"CTRL_DRIVE;65535;-65535"
 
 #-----------------------------------------------------------------------------------------------------------------------
     """ Handles Command to Function Handshake
@@ -33,7 +32,6 @@ class NetworkCommands():
             self.STREAM_STOP:      lambda args: streamer.stop_camera_streaming(),
             self.STREAM_TERMINATE: lambda args: streamer.terminate_connection(),
 
-            self.CONTROL_THROTTLE: lambda args: driver.setMaxThrottle(args),
             self.CONTROL_INPUT:    lambda args: driver.setInput(args)
         }
 

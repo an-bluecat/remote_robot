@@ -13,6 +13,7 @@ class VehicleController():
         self.connect = connect
         self.__prevInput = [0,0]
         self.gamepad = hid.device()
+        self.isFlyStick = False
 
         if (controller):
             deviceList = []
@@ -22,13 +23,10 @@ class VehicleController():
                     print(f"0x{device['vendor_id']:04x}:0x{device['product_id']:04x} {device['product_string']}")
                 deviceList.append(device)
             self.gamepad.open(deviceList[0]['vendor_id'], deviceList[0]['product_id'])
+            if (deviceList[0]['product_string'] == "T.A320 Pilot"): self.isFlyStick = True
 
         self.createEventListener = lambda : threading.Thread(target=self.controlStickListener)
         self.eventListener: threading.Thread = self.createEventListener()
-
-
-    def setMaxThrottle(self, val) -> None:  # Note: THESE ARE PLACEHOLDERS, to be implemented
-        self.connect.send(Command.CONTROL_THROTTLE, val[0], val[1], val[2], val[3])
 
 
     def setInput(self, val) -> None:
@@ -39,14 +37,22 @@ class VehicleController():
 
     def controlStickListener(self):
         while(True):
-            time.sleep(0.02)                                # Polling Rate 50fps
             axes = self.gamepad.read(64)
-            axes = (axes[3] - 128, axes[4] - 128) if axes else [0, 0]
+
+            if (self.isFlyStick):
+                throttle = (255 - axes[6]) / 255
+                axes = ((axes[2]*256+axes[1])/64 - 128, (axes[4]*256+axes[3])/64 - 128) if axes else [0, 0]
+            else:
+                axes = (axes[3] - 128, axes[4] - 128) if axes else [0, 0]
+                throttle = 0.75
+
             if (abs(axes[0]) <= 1 and abs(axes[1]) <= 1):
                 self.setInput([0, 0])
                 continue
+
             power = math.sqrt(axes[0] ** 2 + axes[1] ** 2)
             angle = math.atan2(axes[0], axes[1])
+            turnSpeedReduction = 1 - math.sin(math.fmod(angle+math.pi, math.pi)) * 0.25
 
             if (angle >= 0):
                 if (angle >= math.pi / 2):  # Front-Right
@@ -72,6 +78,6 @@ class VehicleController():
             else:
                 power /= -1 / math.cos(angle)
 
-            left *= power / 128 * 0xFFFF
-            right *= power / 128 * 0xFFFF
+            left *= power * 512 * throttle * turnSpeedReduction  # 0 ~ +-65535
+            right *= power * 512 * throttle * turnSpeedReduction
             self.setInput([int(left), int(right)])

@@ -47,14 +47,14 @@ class DriveController:
 
         if (left >= 0):
             self.setForward("FL", left)
-            self.setForward("RL", right)
+            self.setForward("RL", left)
         else:
             self.setBackward("FL", left)
-            self.setBackward("RL", right)
+            self.setBackward("RL", left)
 
         if (right >= 0):
-            self.setForward("FR", left)
+            self.setForward("FR", right)
             self.setForward("RR", right)
         else:
-            self.setBackward("FR", left)
+            self.setBackward("FR", right)
             self.setBackward("RR", right)
