@@ -43,18 +43,18 @@ class DriveController:
     def setInput(self, val):
         left, right = float(val[0]) / 655.35, float(val[1]) / 655.35
         left = max(min(left, 100), -100)  # Clamp the input signals to the range -100 to 100
-        right = max(min(right, 100), -100)
+        right = max(min(right, 100), -100) * 0.93
 
         if (left >= 0):
             self.setForward("FL", left)
-            self.setForward("RL", left)
+            self.setForward("RL", right)
         else:
             self.setBackward("FL", left)
-            self.setBackward("RL", left)
+            self.setBackward("RL", right)
 
         if (right >= 0):
             self.setForward("FR", left)
-            self.setForward("RR", left)
+            self.setForward("RR", right)
         else:
             self.setBackward("FR", left)
-            self.setBackward("RR", left)
+            self.setBackward("RR", right)
